@@ -1,0 +1,23 @@
+{
+  "pins" : [
+    {
+      "identity" : "kingfisher",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/onevcat/Kingfisher.git",
+      "state" : {
+        "branch" : "master",
+        "revision" : "e8625b80c413457b13ea9be75d07f6e9f5830c19"
+      }
+    },
+    {
+      "identity" : "purelayout",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/PureLayout/PureLayout.git",
+      "state" : {
+        "branch" : "master",
+        "revision" : "8849cc9918c4d72c072cd4dd3827c2c1025697ab"
+      }
+    }
+  ],
+  "version" : 2
+}
