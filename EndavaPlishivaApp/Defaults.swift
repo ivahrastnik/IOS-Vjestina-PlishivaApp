@@ -1,6 +1,6 @@
 import Foundation
 
-enum Preferences {
+enum Defaults {
     private static let favoritePlushiesIdsKey = "favoritePlushiesIdsKey"
     
     static var favoritePlushiesIds: [Int]? {

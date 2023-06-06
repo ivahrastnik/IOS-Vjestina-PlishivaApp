@@ -10,7 +10,6 @@ class CollectionViewController: UIViewController {
     
     private var router: RouterProtocol!
     private var collectionViewModel: CollectionViewModel!
-//    private var database: Database!
     private var allPlushies: [Plushie]!
     private var model: [CollectionCellProtocol] = .init()
     
@@ -29,6 +28,11 @@ class CollectionViewController: UIViewController {
         super.viewDidLoad()
         buildViews()
         loadData()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        collectionView.reloadData()
     }
     
     override func willTransition(to newCollection: UITraitCollection, with coordinator: UIViewControllerTransitionCoordinator) { super.willTransition(to: newCollection, with: coordinator)
@@ -90,20 +94,23 @@ extension CollectionViewController: UICollectionViewDataSource {
         
         print("DEBUG: cellForItemAt: \(indexPath)")
         let plushie = allPlushies[indexPath.row]
-        let plushieId = indexPath.row
+        let plushieId = plushie.id
         var image: UIImage?
-        if let favoriteIds = Preferences.favoritePlushiesIds {
-              if favoriteIds.contains(plushieId) {
-                image = UIImage(systemName: "heart.fill")
-              } else {
-                image = UIImage(systemName: "heart")
-              }
-        }
-//        let currentModel = model[indexPath.row]
-        guard let image else { return cell }
-        image.withTintColor(.white)
-        cell.set(name: plushie.name, imageName: plushie.imageName, heartImage: image)
         
+        cell.configure(with: plushie.imageName, name: plushie.name, plushieId: plushieId) {
+            guard let favPlushies = Defaults.favoritePlushiesIds else { return }
+            var plushieIds = Defaults.favoritePlushiesIds!
+            if favPlushies.contains(plushieId) {
+              plushieIds.removeAll { id in
+                id == plushieId
+              }
+              Defaults.favoritePlushiesIds = plushieIds
+            } else {
+              plushieIds.append(plushieId)
+              Defaults.favoritePlushiesIds = plushieIds
+            }
+            collectionView.reloadData()
+        }
         return cell
     }
 }

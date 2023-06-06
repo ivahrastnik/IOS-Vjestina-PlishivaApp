@@ -26,7 +26,7 @@
 		6EC9F8432A2B52D700D4A8F2 /* Database.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EC9F8422A2B52D700D4A8F2 /* Database.swift */; };
 		6EC9F8472A2CFADC00D4A8F2 /* Configurable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EC9F8462A2CFADC00D4A8F2 /* Configurable.swift */; };
 		6EC9F8492A2CFB1200D4A8F2 /* CollectionCellProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EC9F8482A2CFB1200D4A8F2 /* CollectionCellProtocol.swift */; };
-		6EC9F84B2A2D18E100D4A8F2 /* Preferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EC9F84A2A2D18E100D4A8F2 /* Preferences.swift */; };
+		6EC9F84B2A2D18E100D4A8F2 /* Defaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EC9F84A2A2D18E100D4A8F2 /* Defaults.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -49,7 +49,7 @@
 		6EC9F8422A2B52D700D4A8F2 /* Database.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Database.swift; sourceTree = "<group>"; };
 		6EC9F8462A2CFADC00D4A8F2 /* Configurable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Configurable.swift; sourceTree = "<group>"; };
 		6EC9F8482A2CFB1200D4A8F2 /* CollectionCellProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionCellProtocol.swift; sourceTree = "<group>"; };
-		6EC9F84A2A2D18E100D4A8F2 /* Preferences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Preferences.swift; sourceTree = "<group>"; };
+		6EC9F84A2A2D18E100D4A8F2 /* Defaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Defaults.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -98,7 +98,7 @@
 				6EC9F8402A2B402300D4A8F2 /* PlushieUseCase.swift */,
 				6EC9F8462A2CFADC00D4A8F2 /* Configurable.swift */,
 				6EC9F8482A2CFB1200D4A8F2 /* CollectionCellProtocol.swift */,
-				6EC9F84A2A2D18E100D4A8F2 /* Preferences.swift */,
+				6EC9F84A2A2D18E100D4A8F2 /* Defaults.swift */,
 			);
 			path = EndavaPlishivaApp;
 			sourceTree = "<group>";
@@ -231,7 +231,7 @@
 				6EC9F8472A2CFADC00D4A8F2 /* Configurable.swift in Sources */,
 				6EC9F8412A2B402300D4A8F2 /* PlushieUseCase.swift in Sources */,
 				6EC9F8432A2B52D700D4A8F2 /* Database.swift in Sources */,
-				6EC9F84B2A2D18E100D4A8F2 /* Preferences.swift in Sources */,
+				6EC9F84B2A2D18E100D4A8F2 /* Defaults.swift in Sources */,
 				6EC9F8322A2B3E1700D4A8F2 /* CollectionCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

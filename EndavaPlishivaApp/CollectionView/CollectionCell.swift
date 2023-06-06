@@ -10,6 +10,7 @@ class CollectionCell: UICollectionViewCell {
     private var imageView: UIImageView!
     private let cornerRadiusSize: CGFloat = 10
     private var didTapHeart: (() -> Void)?
+    private var plushieId: Int!
     private var heart: UIButton!
     private var heartImage: UIImage!
 
@@ -20,14 +21,6 @@ class CollectionCell: UICollectionViewCell {
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-    
-    func set(name: String, imageName: String, heartImage: UIImage) {
-        nameLabel.text = name
-        imageView.image = UIImage(named: imageName)
-        imageView.contentMode = .scaleAspectFill
-        self.heartImage = heartImage
-        heart.setImage(heartImage, for: .normal)
     }
 }
 
@@ -43,37 +36,31 @@ extension CollectionCell {
     private func createViews() {
         nameLabel = UILabel()
         imageView = UIImageView()
+        
         heart = UIButton()
         heartImage = UIImage()
+        
         contentView.addSubview(imageView)
         contentView.addSubview(nameLabel)
         contentView.addSubview(heart)
-        
     }
 
     private func styleViews() {
         contentView.backgroundColor = Colors.backgroundColor
         contentView.layer.cornerRadius = cornerRadiusSize
         contentView.clipsToBounds = true
-//        contentView.layer.shadowPath = UIBezierPath(roundedRect: contentView.bounds, cornerRadius: 10).cgPath
-//        contentView.layer.shadowColor = Colors.shadowColor.cgColor
-//        contentView.layer.shadowRadius = 20
-//        contentView.layer.shadowOpacity = 5
-//        contentView.layer.shadowOffset = CGSize(width: 8, height: 7)
         contentView.layer.position = contentView.center
         
         heart.tintColor = .white
         heart.backgroundColor = Colors.cellColor
         heart.layer.cornerRadius = 10
-        heart.setImage(heartImage, for: .normal)
+        heart.setImage(UIImage(systemName: "heart"), for: .normal)
+        heart.setImage(UIImage(systemName: "heart.fill"), for: .selected)
         
         nameLabel.textColor = .white
         nameLabel.font = UIFont(name: "Helvetica", size: 12)
         nameLabel.textAlignment = .center
-//        nameLabel.backgroundColor = .systemGray
         nameLabel.backgroundColor = Colors.cellColor
-//        nameLabel.backgroundColor = UIColor(red: 204, green: 204, blue: 255, alpha: 0.7)
-        
     }
 
     private func defineLayout() {
@@ -93,25 +80,45 @@ extension CollectionCell {
     }
     
     private func setupActions() {
-        heart.addTarget(self, action: #selector(tap), for: .touchUpInside)
+        heart.addTarget(self, action: #selector(tap(_:)), for: .touchUpInside)
       }
       
     @objc
-    private func tap() {
-        didTapHeart?()
+    private func tap(_ sender: UIButton!) {
+        heart.isSelected = !heart.isSelected
+        if heart.isSelected {
+            Defaults.favoritePlushiesIds?.append(plushieId)
+        } else {
+            let index = Defaults.favoritePlushiesIds?.firstIndex(of: plushieId)
+            if let index = index {
+                Defaults.favoritePlushiesIds?.remove(at: index)
+            }
+        }
     }
-      
+    
     override func prepareForReuse() {
         imageView.image = nil
     }
-}
-
-extension CollectionCell {
-    @discardableResult
-    public func configure(with imageName: String, heartImage: UIImage, didTapHeart: @escaping () -> Void) -> Self {
+    
+    public func configure(with imageName: String, name: String, plushieId: Int, didTapHeart: @escaping () -> Void) {
+        
+        nameLabel.text = name
         imageView.image = UIImage(named: imageName)
-        heart.setImage(heartImage, for: .normal)
+        imageView.contentMode = .scaleAspectFill
+        
         self.didTapHeart = didTapHeart
-        return self
+        self.plushieId = plushieId
+        
+        let favIds = Defaults.favoritePlushiesIds
+        if let favIds = favIds {
+            if favIds.contains(plushieId) {
+                heart.isSelected = true
+            } else {
+                heart.isSelected = false
+            }
+        } else {
+            heart.isSelected = false
+        }
   }
 }
+

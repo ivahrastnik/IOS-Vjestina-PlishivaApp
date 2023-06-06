@@ -12,6 +12,7 @@ class FavoritesViewController: UIViewController {
     private var allPlushies: [Plushie]!
     private var favoritesViewModel: FavoritesViewModel!
     private var favIds: [Int] = .init()
+    private var id: Int!
     
     init(router: RouterProtocol, favoritesViewModel: FavoritesViewModel) {
         self.favoritesViewModel = favoritesViewModel
@@ -25,8 +26,13 @@ class FavoritesViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        buildViews()
         loadData()
+        buildViews()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        getFavPlushies()
     }
     
     override func willTransition(to newCollection: UITraitCollection, with coordinator: UIViewControllerTransitionCoordinator) {
@@ -36,13 +42,16 @@ class FavoritesViewController: UIViewController {
     
     private func loadData(){
         allPlushies = Database().allPlushies
+        favIds = []
+        favIds = Defaults.favoritePlushiesIds ?? []
+        print(favIds)
     }
     
     private func buildViews() {
         createViews()
         styleViews()
         defineLayoutForViews()
-        loadData()
+        getFavPlushies()
     }
     
     private func createViews(){
@@ -71,51 +80,49 @@ class FavoritesViewController: UIViewController {
         favoritesCollectionView.autoPinEdge(toSuperviewSafeArea: .trailing, withInset: 12)
     }
     
-    private func getFavoriteMovies() {
-        guard let favPlushies = Preferences.favoritePlushiesIds else { return }
+    private func getFavPlushies() {
+        guard let favPlushies = Defaults.favoritePlushiesIds else { return }
         favIds = favPlushies
-        loadData()
+        print(favIds)
+        favoritesCollectionView.reloadData()
     }
 }
 extension FavoritesViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        allPlushies.count
+        Defaults.favoritePlushiesIds?.count ?? 0
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CollectionCell.reuseIdentifier, for: indexPath)
-                as? CollectionCell,
-            allPlushies.count > indexPath.item
+                as? CollectionCell
         else { return UICollectionViewCell() }
+        
+        if indexPath.row >= Defaults.favoritePlushiesIds?.count ?? 0 { return cell }
         
         print("DEBUG: cellForItemAt: \(indexPath)")
         
+        let index = Defaults.favoritePlushiesIds?[indexPath.row] ?? 0
+        let plushie = allPlushies[index]
+        let plushieId = plushie.id
         
-        let plushieId = indexPath.row
-        var image: UIImage?
-        if let favoriteIds = Preferences.favoritePlushiesIds {
-//              if favoriteIds.contains(plushieId) {
-                image = UIImage(systemName: "heart.fill")
-//              } else {
-//                image = UIImage(systemName: "heart")
-//              }
-        }
-        guard let image else { return cell }
-        cell.set(name: allPlushies[indexPath.row].name, imageName: allPlushies[indexPath.row].imageName, heartImage: image)
-        cell.configure(with: allPlushies[indexPath.row].imageName, heartImage: image) {
-            guard let favoritePlushies = Preferences.favoritePlushiesIds else { return }
-              var plushieIds = Preferences.favoritePlushiesIds!
-              if favoritePlushies.contains(plushieId) {
+        cell.configure(with: plushie.imageName, name: plushie.name, plushieId: plushieId) {
+            collectionView.reloadData()
+            guard let favoritePlushies = Defaults.favoritePlushiesIds else { return }
+              var plushieIds = Defaults.favoritePlushiesIds!
+            if favoritePlushies.contains(plushieId) {
                 plushieIds.removeAll { id in
-                  id == plushieId
+                    id == plushieId
                 }
-                Preferences.favoritePlushiesIds = plushieIds
-                self.getFavoriteMovies()
+                Defaults.favoritePlushiesIds = plushieIds
+                self.getFavPlushies()
+              } else {
+                  plushieIds.append(plushieId)
+                  Defaults.favoritePlushiesIds = plushieIds
               }
-            }
-        
+            collectionView.reloadData()
+        }
         return cell
     }
 }
