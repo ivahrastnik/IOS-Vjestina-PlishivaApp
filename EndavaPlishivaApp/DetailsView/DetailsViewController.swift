@@ -56,7 +56,21 @@ class DetailsViewController: UIViewController, MKMapViewDelegate {
     }
     override func viewWillLayoutSubviews(){
         super.viewWillLayoutSubviews()
-        scrollView.contentSize = CGSize(width: screenWidth, height: 2000)
+        scrollView.contentSize = CGSize(width: screenWidth, height: 1000)
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.imageView.alpha = 0
+    }
+    
+    override func viewDidAppear(_ animated: Bool) { super.viewDidAppear(animated)
+        UIView.animate(
+            withDuration: 0.5,
+            delay: 0.2,
+                animations: {
+                    self.imageView.alpha = 1.0
+            })
     }
     
     override func viewDidLoad() {
@@ -115,7 +129,6 @@ class DetailsViewController: UIViewController, MKMapViewDelegate {
         shadowView.layer.shadowOpacity = 1
         shadowView.layer.shadowOffset = CGSize.zero
         shadowView.layer.shadowRadius = 10
-//        shadowView.layer.shadowPath = UIBezierPath(roundedRect: shadowView.bounds, cornerRadius: 10).cgPath
         
         imageView.clipsToBounds = true
         imageView.layer.cornerRadius = cornerRadiusSize
@@ -126,11 +139,11 @@ class DetailsViewController: UIViewController, MKMapViewDelegate {
         
         nameLabel.text = plushie.name
         nameLabel.textAlignment = .center
-        nameLabel.font = UIFont(name: "Helvetica-Bold", size: 20)
+        nameLabel.font = Fonts.titleFont
         nameLabel.textColor = Colors.shadowColor
         
         descriptionTextView.text = "Handmade using antiallergenic acrylic yarn and polyfil. Not appropriate for children under 2 years!"
-        descriptionTextView.font = UIFont(name: "Helvetica", size: 14)
+        descriptionTextView.font = Fonts.descriptionFont
         descriptionTextView.textAlignment = .center
         descriptionTextView.textColor = Colors.shadowColor
         descriptionTextView.lineBreakMode = .byWordWrapping
@@ -138,12 +151,11 @@ class DetailsViewController: UIViewController, MKMapViewDelegate {
         
         locationLabel.text = "Store availability"
         locationLabel.textAlignment = .center
-        locationLabel.font = UIFont(name: "Helvetica", size: 12)
+        locationLabel.font = Fonts.plushieFont
         locationLabel.textColor = .black
     }
     
     private func defineLayoutForViews(){
-//        scrollView.autoPinEdgesToSuperviewSafeArea()
         scrollView.autoPinEdgesToSuperviewEdges()
         contentView.autoMatch(.width, to: .width, of: scrollView)
         contentView.autoPinEdge(.top, to: .top, of: scrollView)
@@ -193,7 +205,6 @@ class DetailsViewController: UIViewController, MKMapViewDelegate {
         if annotationView == nil {
             annotationView = MKAnnotationView(annotation: annotation, reuseIdentifier: "custom")
             annotationView?.canShowCallout = true
-//            annotationView?.rightCalloutAccessoryView
         } else {
             annotationView?.annotation = annotation
         }

@@ -6,7 +6,9 @@ class CollectionViewController: UIViewController {
     
     private var flowLayout: UICollectionViewFlowLayout!
     private var collectionView: UICollectionView!
-    private var collectionCellHeight: Int = 142
+    private var filterButton: UIButton!
+    private let margin = CGFloat(12)
+    private let collectionCellHeight: Int = 142
     
     private var router: RouterProtocol!
     private var collectionViewModel: CollectionViewModel!
@@ -50,7 +52,6 @@ class CollectionViewController: UIViewController {
     }
     
     private func createViews(){
-        
         flowLayout = UICollectionViewFlowLayout()
         flowLayout.scrollDirection = .vertical
         
@@ -62,7 +63,6 @@ class CollectionViewController: UIViewController {
         collectionView.register(CollectionCell.self, forCellWithReuseIdentifier: CollectionCell.reuseIdentifier)
         collectionView.dataSource = self
         collectionView.delegate = self
-        
     }
     
     private func styleViews(){
@@ -73,8 +73,8 @@ class CollectionViewController: UIViewController {
     private func defineLayoutForViews(){
         collectionView.autoPinEdge(toSuperviewSafeArea: .top)
         collectionView.autoPinEdge(toSuperviewSafeArea: .bottom)
-        collectionView.autoPinEdge(toSuperviewSafeArea: .leading, withInset: 12)
-        collectionView.autoPinEdge(toSuperviewSafeArea: .trailing, withInset: 12)
+        collectionView.autoPinEdge(toSuperviewSafeArea: .leading, withInset: margin)
+        collectionView.autoPinEdge(toSuperviewSafeArea: .trailing, withInset: margin)
     }
     
 }
@@ -95,7 +95,7 @@ extension CollectionViewController: UICollectionViewDataSource {
         print("DEBUG: cellForItemAt: \(indexPath)")
         let plushie = allPlushies[indexPath.row]
         let plushieId = plushie.id
-        var image: UIImage?
+//        var image: UIImage?
         
         cell.configure(with: plushie.imageName, name: plushie.name, plushieId: plushieId) {
             guard let favPlushies = Defaults.favoritePlushiesIds else { return }

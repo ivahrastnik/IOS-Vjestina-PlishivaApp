@@ -35,10 +35,9 @@ class Router: RouterProtocol {
         window?.makeKeyAndVisible()
     }
     func styleControllers() {
-        navigationController.navigationBar.titleTextAttributes = [NSAttributedString.Key.font: UIFont(name: "Georgia-Bold", size: 20)!]
+        navigationController.navigationBar.titleTextAttributes = [NSAttributedString.Key.font: Fonts.navTitleFont!]
         navigationController.navigationBar.barTintColor = Colors.backgroundColor
         collectionVC.navigationItem.title = "PlishIva APP"
-        favoritesVC.navigationItem.title = "Favorites"
         
         let home = UIImage(systemName: "house")
         collectionVC.tabBarItem = UITabBarItem(title: "All plushies", image: .some(home!), selectedImage: .some(home!))

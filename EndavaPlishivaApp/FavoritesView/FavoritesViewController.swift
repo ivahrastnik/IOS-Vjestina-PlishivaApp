@@ -6,6 +6,7 @@ class FavoritesViewController: UIViewController {
     private var flowLayout: UICollectionViewFlowLayout!
     private var favoritesCollectionView: UICollectionView!
     private var collectionCellHeight: Int = 142
+    private var titleLabel: UILabel!
     
     private var router: RouterProtocol!
     private var favPlushies: [Plushie]!
@@ -32,7 +33,17 @@ class FavoritesViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        self.favoritesCollectionView.alpha = 0
         getFavPlushies()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) { super.viewDidAppear(animated)
+        UIView.animate(
+            withDuration: 0.5,
+            delay: 0.2,
+                animations: {
+                    self.favoritesCollectionView.alpha = 1.0
+            })
     }
     
     override func willTransition(to newCollection: UITraitCollection, with coordinator: UIViewControllerTransitionCoordinator) {
@@ -55,6 +66,9 @@ class FavoritesViewController: UIViewController {
     }
     
     private func createViews(){
+        titleLabel = UILabel()
+        view.addSubview(titleLabel)
+        
         flowLayout = UICollectionViewFlowLayout()
         flowLayout.scrollDirection = .vertical
         
@@ -70,11 +84,19 @@ class FavoritesViewController: UIViewController {
     
     private func styleViews(){
         view.backgroundColor = Colors.backgroundColor
+        titleLabel.text = "My favorite plushies"
+        titleLabel.font = Fonts.navTitleFont
+        titleLabel.textAlignment = .center
+        titleLabel.textColor = .black
         favoritesCollectionView.backgroundColor = Colors.backgroundColor
     }
     
     private func defineLayoutForViews(){
-        favoritesCollectionView.autoPinEdge(toSuperviewSafeArea: .top)
+        titleLabel.autoPinEdge(toSuperviewSafeArea: .top, withInset: 8)
+        titleLabel.autoPinEdge(toSuperviewSafeArea: .leading, withInset: 12)
+        titleLabel.autoPinEdge(toSuperviewSafeArea: .trailing, withInset: 12)
+        
+        favoritesCollectionView.autoPinEdge(.top, to: .bottom, of: titleLabel, withOffset: 16)
         favoritesCollectionView.autoPinEdge(toSuperviewSafeArea: .bottom)
         favoritesCollectionView.autoPinEdge(toSuperviewSafeArea: .leading, withInset: 12)
         favoritesCollectionView.autoPinEdge(toSuperviewSafeArea: .trailing, withInset: 12)
@@ -135,12 +157,4 @@ extension FavoritesViewController: UICollectionViewDelegateFlowLayout {
         let collectionCellWidth = (Int(collectionView.bounds.width)/2 - emptySpace)
         return CGSize(width: collectionCellWidth, height: collectionCellHeight)
     }
-}
-
-extension FavoritesViewController: UICollectionViewDelegate {
-    
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        router.showDetailsViewController(plushieId: indexPath.row)
-    }
-    
 }
